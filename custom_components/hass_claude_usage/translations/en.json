@@ -7,6 +7,13 @@
         "data": {
           "auth_code": "Authorization Code"
         }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate with Claude",
+        "description": "Your Claude authentication has expired or been revoked. [Open this link]({url}) to log in again with Anthropic.\n\nAfter authorizing, paste the new authorization code below.",
+        "data": {
+          "auth_code": "Authorization Code"
+        }
       }
     },
     "error": {
@@ -14,7 +21,8 @@
       "exchange_failed": "Failed to exchange code for tokens. Please try again."
     },
     "abort": {
-      "already_configured": "Claude Usage is already configured"
+      "already_configured": "Claude Usage is already configured",
+      "reauth_successful": "Re-authentication was successful"
     }
   },
   "options": {

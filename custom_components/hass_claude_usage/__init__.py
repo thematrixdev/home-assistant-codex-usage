@@ -11,6 +11,7 @@ import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -88,7 +89,7 @@ class ClaudeUsageCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 USAGE_API_URL, headers=headers, timeout=aiohttp.ClientTimeout(total=15)
             )
             if resp.status == 401:
-                raise UpdateFailed("Authentication failed - token may be invalid")
+                raise ConfigEntryAuthFailed("Authentication failed - token may be invalid")
             resp.raise_for_status()
             raw = await resp.json()
         except aiohttp.ClientError as err:
@@ -121,13 +122,13 @@ class ClaudeUsageCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 timeout=aiohttp.ClientTimeout(total=15),
             )
             if not resp.ok:
-                raise UpdateFailed(f"Token refresh failed ({resp.status})")
+                raise ConfigEntryAuthFailed(f"Token refresh failed ({resp.status})")
             token_data = await resp.json()
         except aiohttp.ClientError as err:
             raise UpdateFailed(f"Token refresh request failed: {err}") from err
 
         if "access_token" not in token_data:
-            raise UpdateFailed("Token refresh response missing access_token")
+            raise ConfigEntryAuthFailed("Token refresh response missing access_token")
 
         new_data = {
             **self.config_entry.data,
