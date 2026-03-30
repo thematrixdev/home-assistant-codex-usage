@@ -1,6 +1,6 @@
 # AGENTS.md - Design Decisions & Implementation Notes
 
-This document captures key architectural decisions, API discoveries, and design rationale for the Claude Usage Home Assistant integration.
+This document captures key architectural decisions, API discoveries, and design rationale for the Codex Usage Home Assistant integration.
 
 ## Project Preferences
 
@@ -23,7 +23,7 @@ Refactored from a standalone daemon concept originally explored in the `cc-playg
 - The usage API endpoint (`/api/oauth/usage`) is only available via OAuth bearer tokens, not API keys
 - API keys don't provide access to consumer subscription usage data (Pro/Max plans)
 - OAuth tokens can be refreshed automatically without user intervention
-- Matches the authentication pattern used by Claude Code CLI
+- Matches the authentication pattern used by Codex Code CLI
 
 ### DataUpdateCoordinator Pattern
 
@@ -38,7 +38,7 @@ Refactored from a standalone daemon concept originally explored in the `cc-playg
 
 ### Single Device, Multiple Sensors
 
-**Decision:** Create one logical "Claude Usage" device with 10 sensor entities.
+**Decision:** Create one logical "Codex Usage" device with 10 sensor entities.
 
 **Rationale:**
 - Clean UI organization in HA dashboard
@@ -62,7 +62,7 @@ Refactored from a standalone daemon concept originally explored in the `cc-playg
 
 **URL:** `https://api.anthropic.com/api/oauth/usage`
 
-**Discovery:** Found in Claude Code CLI source at `~/.nvm/versions/node/v22.18.0/lib/node_modules/@anthropic-ai/claude-code/cli.js:4032`
+**Discovery:** Found in Codex Code CLI source at `~/.nvm/versions/node/v22.18.0/lib/node_modules/@anthropic-ai/codex-code/cli.js:4032`
 
 **Method:** GET with Bearer token authentication
 
@@ -108,14 +108,14 @@ Refactored from a standalone daemon concept originally explored in the `cc-playg
 
 ### OAuth Configuration
 
-**Client ID:** `9d1c250a-e61b-44d9-88ed-5944d1962f5e` (same as Claude Code CLI)
+**Client ID:** `9d1c250a-e61b-44d9-88ed-5944d1962f5e` (same as Codex Code CLI)
 
 **Endpoints:**
 - Authorize: `https://console.anthropic.com/oauth/authorize`
 - Token: `https://console.anthropic.com/v1/oauth/token`
 - Redirect URI: `https://console.anthropic.com/oauth/code/callback`
 
-**Scopes:** `org:create_api_key user:profile user:inference user:sessions:claude_code`
+**Scopes:** `org:create_api_key user:profile user:inference user:sessions:codex_code`
 
 **Flow:** OAuth 2.0 Authorization Code with PKCE (SHA-256)
 
@@ -218,7 +218,7 @@ challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
 
 4. **Free Tier Support:** Free tier accounts get empty response `{}`. All sensors show unavailable, which is correct but might confuse users.
 
-5. **ToS Compliance:** Using Claude Code's OAuth client ID in a third-party integration may violate Anthropic's Terms of Service. Consider this a prototype/personal-use integration.
+5. **ToS Compliance:** Using Codex Code's OAuth client ID in a third-party integration may violate Anthropic's Terms of Service. Consider this a prototype/personal-use integration.
 
 ## Future Enhancements
 
@@ -248,7 +248,7 @@ challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
 ### Non-Goals
 
 - **Real-time Updates:** Usage data is inherently delayed (5-hour buckets), no value in frequent polling
-- **Multiple Accounts:** Integration supports one Claude account per HA instance (create multiple config entries if needed)
+- **Multiple Accounts:** Integration supports one Codex account per HA instance (create multiple config entries if needed)
 - **API Key Auth:** Not supported by the usage endpoint, OAuth-only
 
 ## Testing Recommendations
@@ -262,7 +262,7 @@ challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
    - [ ] Can't configure twice (unique_id check)
 
 2. **Sensors:**
-   - [ ] All 10 sensors created under "Claude Usage" device
+   - [ ] All 10 sensors created under "Codex Usage" device
    - [ ] Session sensors show correct % and timestamp
    - [ ] Weekly sensors show correct % and timestamp
    - [ ] Extra usage sensors reflect actual state
@@ -295,27 +295,27 @@ pip install homeassistant
 # Validate manifest
 python3 -m homeassistant.scripts.check_config \
   --script check_config \
-  --files custom_components/hass_claude_usage/manifest.json
+  --files custom_components/hass_codex_usage/manifest.json
 
 # Type checking (if adding type hints)
 pip install mypy
-mypy custom_components/hass_claude_usage/
+mypy custom_components/hass_codex_usage/
 ```
 
 ## References
 
 ### Research Sources
 
-- [Claude OAuth implementation (opencode-anthropic-auth)](https://github.com/anomalyco/opencode-anthropic-auth/blob/master/index.mjs)
+- [Codex OAuth implementation (opencode-anthropic-auth)](https://github.com/anomalyco/opencode-anthropic-auth/blob/master/index.mjs)
 - [OpenCode OAuth usage dashboard feature request](https://github.com/anomalyco/opencode/issues/8911)
-- [Claude Code source (local installation)](file://~/.nvm/versions/node/v22.18.0/lib/node_modules/@anthropic-ai/claude-code/cli.js)
+- [Codex Code source (local installation)](file://~/.nvm/versions/node/v22.18.0/lib/node_modules/@anthropic-ai/codex-code/cli.js)
 - [Home Assistant DataUpdateCoordinator docs](https://developers.home-assistant.io/docs/integration_fetching_data)
 - [Home Assistant Config Flow docs](https://developers.home-assistant.io/docs/config_entries_config_flow_handler)
 
 ### Related Projects
 
-- **claude_max:** Python tool for using Claude Max subscriptions programmatically
-- **Claude Code Usage Monitor:** Terminal-based usage monitor with ML predictions
+- **codex_max:** Python tool for using Codex Max subscriptions programmatically
+- **Codex Code Usage Monitor:** Terminal-based usage monitor with ML predictions
 - **opencode-anthropic-auth:** Reusable OAuth library for Anthropic services
 
 ## Release Process
@@ -326,13 +326,13 @@ This project uses **major version numbering only** (1, 2, 3...). No semver.
 
 1. **Update manifest.json version**:
    ```bash
-   # Edit custom_components/hass_claude_usage/manifest.json
+   # Edit custom_components/hass_codex_usage/manifest.json
    # Change "version": "2" to "version": "3"
    ```
 
 2. **Commit the version bump**:
    ```bash
-   git add custom_components/hass_claude_usage/manifest.json
+   git add custom_components/hass_codex_usage/manifest.json
    git commit -m "Bump version to 3"
    git push
    ```

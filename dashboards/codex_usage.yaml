@@ -1,0 +1,18 @@
+title: OpenAI Codex Usage
+views:
+  - title: Usage
+    path: usage
+    cards:
+      - type: entities
+        title: OpenAI Codex Usage
+        entities:
+          - entity: sensor.openai_codex_usage_5_hours_usage_limit
+            name: 5 Hours Usage Limit
+          - entity: sensor.openai_codex_usage_weekly_usage_limit
+            name: Weekly Usage Limit
+          - entity: sensor.openai_codex_usage_code_review_limit
+            name: Code Review Limit
+
+      - type: entity
+        entity: sensor.openai_codex_usage_api_error
+        name: API Error

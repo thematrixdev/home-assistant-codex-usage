@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect OpenAI Codex Usage",
+        "description": "Enter Codex credentials from another machine where `codex login --device-auth` was completed.\n\nRequired: Access Token\nOptional: Account ID and Refresh Token\n\nCopy from ~/.codex/auth.json under tokens.access_token, tokens.account_id, and tokens.refresh_token.",
+        "data": {
+          "access_token": "Access Token",
+          "account_id": "Account ID (optional)",
+          "refresh_token": "Refresh Token (optional)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect OpenAI Codex Usage",
+        "description": "Your credentials are invalid or expired. Enter fresh credentials from a machine where Codex is logged in.",
+        "data": {
+          "access_token": "Access Token",
+          "account_id": "Account ID (optional)",
+          "refresh_token": "Refresh Token (optional)"
+        }
+      }
+    },
+    "error": {
+      "missing_access_token": "Please enter access token",
+      "invalid_access_token": "Credential validation failed. Ensure token is fresh and copied correctly."
+    },
+    "abort": {
+      "already_configured": "OpenAI Codex Usage is already configured",
+      "reauth_successful": "Re-authentication was successful"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "OpenAI Codex Usage Options",
+        "description": "Configure polling interval and credentials.",
+        "data": {
+          "update_interval": "Update interval (seconds)",
+          "access_token": "Access Token",
+          "account_id": "Account ID (optional)",
+          "refresh_token": "Refresh Token (optional)"
+        }
+      }
+    }
+  }
+}

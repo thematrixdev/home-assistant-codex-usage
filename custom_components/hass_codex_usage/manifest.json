@@ -1,0 +1,11 @@
+{
+  "domain": "hass_codex_usage",
+  "name": "OpenAI Codex Usage",
+  "codeowners": ["@trickv"],
+  "config_flow": true,
+  "documentation": "https://github.com/trickv/hass-codex-usage",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/trickv/hass-codex-usage/issues",
+  "requirements": [],
+  "version": "7"
+}
