@@ -26,7 +26,8 @@
       "invalid_access_token": "Credential validation failed. Ensure token is fresh and copied correctly."
     },
     "abort": {
-      "already_configured": "OpenAI Codex Usage is already configured",
+      "already_configured": "This Codex account is already configured",
+      "account_mismatch": "Re-authentication must use the same Codex account",
       "reauth_successful": "Re-authentication was successful"
     }
   },

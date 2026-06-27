@@ -35,7 +35,7 @@ _LOGGER = logging.getLogger(__name__)
 class CodexUsageConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for OpenAI Codex Usage."""
 
-    VERSION = 1
+    VERSION = 2
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle setup with manual credential input."""
@@ -132,14 +132,28 @@ class CodexUsageConfigFlow(ConfigFlow, domain=DOMAIN):
             if not access_token:
                 errors[CONF_ACCESS_TOKEN] = "missing_access_token"
             elif await self._validate_credentials(access_token, account_id):
-                return self.async_update_reload_and_abort(
-                    self._get_reauth_entry(),
-                    data_updates={
-                        CONF_ACCESS_TOKEN: access_token,
-                        CONF_ACCOUNT_ID: account_id,
-                        CONF_REFRESH_TOKEN: refresh_token,
-                    },
-                )
+                    reauth_entry = self._get_reauth_entry()
+                    stored_id = reauth_entry.data.get(CONF_ACCOUNT_ID)
+
+                    # Allow replacing migration sentinel (entry_id placeholder)
+                    # but block reauth with a genuinely different account
+                    if (
+                        account_id
+                        and stored_id
+                        and stored_id != reauth_entry.entry_id
+                        and account_id != stored_id
+                    ):
+                        return self.async_abort(reason="account_mismatch")
+
+                    return self.async_update_reload_and_abort(
+                        reauth_entry,
+                        unique_id=account_id if account_id else reauth_entry.unique_id,
+                        data_updates={
+                            CONF_ACCESS_TOKEN: access_token,
+                            CONF_ACCOUNT_ID: account_id,
+                            CONF_REFRESH_TOKEN: refresh_token,
+                        },
+                    )
             else:
                 errors[CONF_ACCESS_TOKEN] = "invalid_access_token"
 

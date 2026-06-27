@@ -35,6 +35,30 @@ PLATFORMS = [Platform.SENSOR]
 type CodexUsageConfigEntry = ConfigEntry[CodexUsageCoordinator]
 
 
+async def async_migrate_entry(hass: HomeAssistant, entry: CodexUsageConfigEntry) -> bool:
+    """Migrate config entry to a new version."""
+    if entry.version == 1:
+        _LOGGER.debug("Migrating Codex Usage config entry from v1 to v2")
+        # v1 may have unique_id=DOMAIN — need per-account unique_id
+        account_id = _normalize_credential_value(
+            entry.data.get(CONF_ACCOUNT_ID, ""),
+        )
+        # ponytail: fallback to entry_id if no account_id stored — reauth replaces
+        if not account_id:
+            account_id = entry.entry_id
+
+        hass.config_entries.async_update_entry(
+            entry,
+            unique_id=account_id,
+            version=2,
+        )
+        _LOGGER.info(
+            "Migrated Codex Usage config entry to v2 (unique_id=%s)",
+            account_id,
+        )
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: CodexUsageConfigEntry) -> bool:
     """Set up OpenAI Codex Usage from a config entry."""
     coordinator = CodexUsageCoordinator(hass, entry)
