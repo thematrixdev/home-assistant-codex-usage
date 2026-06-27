@@ -1,11 +1,11 @@
 {
   "domain": "hass_codex_usage",
   "name": "OpenAI Codex Usage",
-  "codeowners": ["@trickv"],
+  "codeowners": ["@thematrixdev"],
   "config_flow": true,
-  "documentation": "https://github.com/trickv/hass-codex-usage",
+  "documentation": "https://github.com/thematrixdev/home-assistant-codex-usage",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/trickv/hass-codex-usage/issues",
+  "issue_tracker": "https://github.com/thematrixdev/home-assistant-codex-usage/issues",
   "requirements": [],
   "version": "8"
 }
