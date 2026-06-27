@@ -469,7 +469,8 @@ def _as_percent(value: Any) -> float | None:
     else:
         return None
 
-    if 0 <= numeric <= 1:
+    # ponytail: strict < 1 — value of exactly 1 means 1%, not 100%-as-fraction
+    if 0 < numeric < 1:
         numeric *= 100
     if numeric < 0:
         return None
