@@ -22,6 +22,7 @@ from .const import (
     WHAM_USAGE_API_URL,
     CONF_ACCESS_TOKEN,
     CONF_ACCOUNT_ID,
+    CONF_ACCOUNT_NAME,
     CONF_REFRESH_TOKEN,
     CONF_UPDATE_INTERVAL,
     DEFAULT_UPDATE_INTERVAL,
@@ -49,13 +50,21 @@ class CodexUsageConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors[CONF_ACCESS_TOKEN] = "missing_access_token"
             else:
                 if await self._validate_credentials(access_token, account_id):
-                    await self.async_set_unique_id(DOMAIN)
+                    account_name = user_input.get(CONF_ACCOUNT_NAME, "").strip()
+                    unique_id = account_id if account_id else DOMAIN
+                    await self.async_set_unique_id(unique_id)
                     self._abort_if_unique_id_configured()
+
+                    title = "OpenAI Codex Usage"
+                    if account_name:
+                        title = f"OpenAI Codex Usage ({account_name})"
+
                     return self.async_create_entry(
-                        title="OpenAI Codex Usage",
+                        title=title,
                         data={
                             CONF_ACCESS_TOKEN: access_token,
                             CONF_ACCOUNT_ID: account_id,
+                            CONF_ACCOUNT_NAME: account_name,
                             CONF_REFRESH_TOKEN: refresh_token,
                         },
                         options={
@@ -73,6 +82,7 @@ class CodexUsageConfigFlow(ConfigFlow, domain=DOMAIN):
                 {
                     vol.Required(CONF_ACCESS_TOKEN): str,
                     vol.Optional(CONF_ACCOUNT_ID, default=""): str,
+                    vol.Optional(CONF_ACCOUNT_NAME, default=""): str,
                     vol.Optional(CONF_REFRESH_TOKEN, default=""): str,
                 }
             ),

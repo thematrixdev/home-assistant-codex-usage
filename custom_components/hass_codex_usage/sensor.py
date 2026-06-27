@@ -59,7 +59,7 @@ class CodexUsageSensor(CoordinatorEntity[CodexUsageCoordinator], SensorEntity):
 
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
-            name="OpenAI Codex Usage",
+            name=entry.title,
             entry_type=DeviceEntryType.SERVICE,
         )
 

@@ -1,18 +1,36 @@
+# Multi-account example: replace entity IDs with your actual sensor names.
+# Find yours in HA → Settings → Devices & Services → Entities → filter "codex".
 title: OpenAI Codex Usage
 views:
   - title: Usage
     path: usage
     cards:
+      # Account 1 (Personal)
       - type: entities
-        title: OpenAI Codex Usage
+        title: "Personal"
         entities:
-          - entity: sensor.openai_codex_usage_5_hours_usage_limit
+          - entity: sensor.openai_codex_usage_personal_5_hours_usage_limit
             name: 5 Hours Usage Limit
-          - entity: sensor.openai_codex_usage_weekly_usage_limit
+          - entity: sensor.openai_codex_usage_personal_weekly_usage_limit
             name: Weekly Usage Limit
-          - entity: sensor.openai_codex_usage_code_review_limit
+          - entity: sensor.openai_codex_usage_personal_code_review_limit
             name: Code Review Limit
 
       - type: entity
-        entity: sensor.openai_codex_usage_api_error
-        name: API Error
+        entity: sensor.openai_codex_usage_personal_api_error
+        name: API Error (Personal)
+
+      # Account 2 (Work)
+      - type: entities
+        title: "Work"
+        entities:
+          - entity: sensor.openai_codex_usage_work_5_hours_usage_limit
+            name: 5 Hours Usage Limit
+          - entity: sensor.openai_codex_usage_work_weekly_usage_limit
+            name: Weekly Usage Limit
+          - entity: sensor.openai_codex_usage_work_code_review_limit
+            name: Code Review Limit
+
+      - type: entity
+        entity: sensor.openai_codex_usage_work_api_error
+        name: API Error (Work)

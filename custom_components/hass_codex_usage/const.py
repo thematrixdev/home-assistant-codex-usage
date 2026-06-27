@@ -14,6 +14,7 @@ DEFAULT_UPDATE_INTERVAL = 300  # seconds
 # Config keys
 CONF_ACCESS_TOKEN = "access_token"
 CONF_ACCOUNT_ID = "account_id"
+CONF_ACCOUNT_NAME = "account_name"
 CONF_REFRESH_TOKEN = "refresh_token"
 CONF_UPDATE_INTERVAL = "update_interval"
 
