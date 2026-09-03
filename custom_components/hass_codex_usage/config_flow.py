@@ -153,6 +153,14 @@ class CodexUsageConfigFlow(ConfigFlow, domain=DOMAIN):
                             CONF_ACCOUNT_ID: account_id,
                             CONF_REFRESH_TOKEN: refresh_token,
                         },
+                        # options shadow data in the coordinator, so stale
+                        # options would silently override reauth credentials
+                        options={
+                            **reauth_entry.options,
+                            CONF_ACCESS_TOKEN: access_token,
+                            CONF_ACCOUNT_ID: account_id,
+                            CONF_REFRESH_TOKEN: refresh_token,
+                        },
                     )
             else:
                 errors[CONF_ACCESS_TOKEN] = "invalid_access_token"
